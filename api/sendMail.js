@@ -68,27 +68,39 @@ module.exports = async (req, res) => {
       return res.status(403).json({
         error: true,
         message: 'Name can`t be empty',
+        result: {
+          success: false,
+        },
       });
     }
     if (email === '') {
       return res.status(403).json({
         error: true,
         message: 'Email can`t be empty',
+        result: {
+          success: false,
+        },
       });
     }
     if (password === '') {
       return res.status(403).json({
         error: true,
         message: 'Password can`t be empty',
+        result: {
+          success: false,
+        },
       });
     }
     if (password !== passwordConfirm) {
       return res.status(403).json({
         error: true,
         message: 'Passwords doesn`t match',
+        result: {
+          success: false,
+        },
       });
     }
     const result = await formSubmit(req.body);
-    return res.json(result);
+    return res.json({ result, error: false, message: '' });
   }
 };

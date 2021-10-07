@@ -1,6 +1,13 @@
 import React from 'react';
 
-export const Input = ({ placeholder, type, label, value, setValue }) => (
+export const Input = ({
+  placeholder,
+  type,
+  label,
+  value,
+  setValue,
+  disabled = false,
+}) => (
   <>
     <label>{label}</label>
     <input
@@ -8,6 +15,7 @@ export const Input = ({ placeholder, type, label, value, setValue }) => (
       type={type}
       value={value}
       onChange={e => setValue(e.target.value)}
+      disabled={disabled}
     />
   </>
 );

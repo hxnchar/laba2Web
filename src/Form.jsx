@@ -1,28 +1,47 @@
 import React, { useState } from 'react';
 import { Input } from './Input';
+import Loader from 'react-loader-spinner';
+import { useLocation } from 'react-router-dom';
 
 export const Form = () => {
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+
+  const [showSpinner, setShowSpinner] = useState(false);
+  const [disableButton, setDisableButton] = useState(false);
+  const [resultText, setResultText] = useState('');
   const formData = {
     email,
     name,
     password,
     passwordConfirm,
   };
-  const onSubmit = e => {
+  const route = useLocation();
+  const fullRoute = window.location.href;
+  const rootURL = fullRoute.substr(0, fullRoute.indexOf(route));
+  const onSubmit = async e => {
     e.preventDefault();
-    fetch('https://2laba-dev-react.vercel.app/api/sendMail', {
+    //https://2laba-dev-react.vercel.app/api/sendMail
+    setShowSpinner(true);
+    setResultText('');
+    setDisableButton(true);
+    const result = await fetch(rootURL + 'api/sendMail', {
       method: 'POST',
       body: JSON.stringify(formData),
       headers: {
         'Content-Type': 'application/json',
       },
-    })
-      .then(res => console.log(res))
-      .catch(err => console.log(err));
+    });
+    const responce = await result.json();
+    setShowSpinner(false);
+    setDisableButton(false);
+    if (!responce.result.success) {
+      setResultText(responce.message);
+    } else {
+      setResultText('Email is sent');
+    }
   };
   return (
     <form onSubmit={e => onSubmit(e)}>
@@ -54,7 +73,10 @@ export const Form = () => {
         value={passwordConfirm}
         setValue={setPasswordConfirm}
       />
-      <Input type="submit" />
+      <Input type="submit" disabled={disableButton} />
+      {showSpinner ? <Loader /> : null}
+      <br />
+      {resultText}
     </form>
   );
 };

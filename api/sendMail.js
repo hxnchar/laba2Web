@@ -57,7 +57,7 @@ module.exports = async (req, res) => {
     } catch (e) {
       return res.status(429).json({
         status: 429,
-        error: Errors.TOO_MANY_REQUESTS,
+        error: 'too many req',
         result: {
           success: false,
         },

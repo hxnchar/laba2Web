@@ -27,7 +27,7 @@ export const Form = () => {
     setShowSpinner(true);
     setResultText('');
     setDisableButton(true);
-    const result = await fetch(rootURL + 'api/sendMail', {
+    const result = await fetch('/api/sendMail', {
       method: 'POST',
       body: JSON.stringify(formData),
       headers: {

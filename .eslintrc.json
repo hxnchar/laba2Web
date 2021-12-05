@@ -4,7 +4,8 @@
     "sourceType": "module" // Allows for the use of imports
   },
   "extends": [
-    "eslint:recommended" // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "eslint:recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+    "plugin:sonarjs/recommended"
   ],
   "rules": {
     "quotes": ["error", "single"],

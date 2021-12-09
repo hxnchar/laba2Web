@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
-const from = `aleksey - ${process.env.EMAIL_ADDRESS}`;
+const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
 
 async function formSubmit(formData) {
   const data = new Date();

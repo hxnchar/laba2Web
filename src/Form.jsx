@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Input } from './Input';
 import Loader from 'react-loader-spinner';
-import { useLocation } from 'react-router-dom';
 
 export const Form = () => {
   const [email, setEmail] = useState('');
@@ -18,9 +17,6 @@ export const Form = () => {
     password,
     passwordConfirm,
   };
-  const route = useLocation();
-  const fullRoute = window.location.href;
-  const rootURL = fullRoute.substr(0, fullRoute.indexOf(route));
   const onSubmit = async e => {
     e.preventDefault();
     //https://2laba-dev-react.vercel.app/api/sendMail

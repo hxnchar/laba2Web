@@ -30,12 +30,14 @@ const rateLimit = (ip, limit = 3) => {
 };
 
 function getTransporter() {
+  console.log(process.env.EMAIL_ADRESS);
+  console.log(process.env.EMAIL_PASSWORD);
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
-      user: process.env.EMAIL_ADDRESS,
+      user: process.env.EMAIL_ADRESS,
       pass: process.env.EMAIL_PASSWORD,
     },
   });
@@ -57,10 +59,9 @@ module.exports = async (req, res) => {
       status: '200',
     });
   }
-  
   if (req.method === 'POST') {
     try {
-      rateLimit(req.headers['x-real-ip']);
+      rateLimit(req.headers['x-real-ip'], 3);
     } catch (e) {
       return res.status(429).json({
         status: 429,

@@ -7,7 +7,7 @@ const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
 async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
-    from: from,
+    from,
     to: 'alekseyhonchar@gmail.com',
     subject: 'New user',
     html: sanitizer(

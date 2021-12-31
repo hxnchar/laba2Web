@@ -8,7 +8,7 @@ async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: 'alekseyhonchar@gmail.com',
+    to: `${process.env.EMAIL_ADRESS_TO}`,
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -26,7 +26,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: `${process.env.MAIL_POST}`,
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {

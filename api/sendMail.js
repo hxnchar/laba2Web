@@ -105,9 +105,9 @@ module.exports = async (req, res) => {
         },
       });
     }
+    let result;
     try{
-      const result = await formSubmit(req.body);
-      return res.json({ result, error: false, message: '' });
+      result = await formSubmit(req.body);
     }
     catch{
       return res.status(501).json({
@@ -118,5 +118,6 @@ module.exports = async (req, res) => {
         },
       });
     }
+    return res.json({ result, error: false, message: '' });
   }
 };

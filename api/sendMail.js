@@ -3,13 +3,12 @@ const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
-const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: `${process.env.EMAIL_ADRESS_TO}`,
+    to: 'alekseyhonchar@gmail.com',
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -19,15 +18,22 @@ async function formSubmit(formData) {
 
 const history = new Map();
 const rateLimit = (ip, limit = 3) => {
+  if (!history.has(ip)) {
+    history.set(ip, 0);
+  }
   if (history.get(ip) > limit) {
     throw new Error();
   }
+  console.log('Ip: ', ip, '; Number of req before: ', history.get(ip));
   history.set(ip, history.get(ip) + 1);
+  console.log('Ip: ', ip, '; Number of req after: ', history.get(ip));
 };
 
 function getTransporter() {
+  console.log(process.env.EMAIL_ADRESS);
+  console.log(process.env.EMAIL_PASSWORD);
   return nodemailer.createTransport({
-    host: `${process.env.MAIL_POST}`,
+    host: 'smtp.gmail.com',
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
@@ -39,6 +45,7 @@ function getTransporter() {
 
 async function sendMail(options) {
   try {
+    const transport = getTransporter();
     await transport.sendMail(options);
     return { success: true };
   } catch (error) {
@@ -48,18 +55,6 @@ async function sendMail(options) {
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
-    try {
-      rateLimit(req.headers['x-real-ip'], 3);
-    } catch (e) {
-      return res.status(429).json({
-        status: 429,
-        message: 'too many req',
-        error: true,
-        result: {
-          success: false,
-        },
-      });
-    }
     return res.json({
       status: '200',
     });
@@ -87,10 +82,19 @@ module.exports = async (req, res) => {
         },
       });
     }
-    if (email === '' || password === '') {
+    if (email === '') {
       return res.status(403).json({
         error: true,
-        message: 'Email or password can`t be empty',
+        message: 'Email can`t be empty',
+        result: {
+          success: false,
+        },
+      });
+    }
+    if (password === '') {
+      return res.status(403).json({
+        error: true,
+        message: 'Password can`t be empty',
         result: {
           success: false,
         },
@@ -105,8 +109,7 @@ module.exports = async (req, res) => {
         },
       });
     }
-    let result;
-    result = await formSubmit(req.body);
+    const result = await formSubmit(req.body);
     return res.json({ result, error: false, message: '' });
   }
 };

@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
 const toMail = `${process.env.EMAIL_ADRESS_TO}`;
-const hostMail = `${process.env.MAIL_POST}`;
+const hostMail = `smtp.gmail.com`;
 const transport = getTransporter();
 
 async function formSubmit(formData) {

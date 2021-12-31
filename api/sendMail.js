@@ -3,7 +3,6 @@ const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
-const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
@@ -27,7 +26,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
     return nodemailer.createTransport({
-    host: `${process.env.MAIL_POST}`,
+    host: `${process.env.EMAIL_ADRESS_TO}`,
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
@@ -39,6 +38,7 @@ function getTransporter() {
 
 async function sendMail(options) {
   try {
+    const transport = getTransporter();
     await transport.sendMail(options);
     return { success: true };
   } catch (error) {
@@ -48,18 +48,6 @@ async function sendMail(options) {
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
-    try {
-      rateLimit(req.headers['x-real-ip'], 3);
-    } catch (e) {
-      return res.status(429).json({
-        status: 429,
-        message: 'too many req',
-        error: true,
-        result: {
-          success: false,
-        },
-      });
-    }
     return res.json({
       status: '200',
     });

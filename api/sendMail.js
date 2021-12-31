@@ -11,7 +11,7 @@ async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    toMail,
+    to: toMail,
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`

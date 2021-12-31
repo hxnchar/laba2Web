@@ -39,9 +39,9 @@ export const Form = () => {
         setResultText('Email is sent');
       }
     }
-   catch{
-    setResultText('Error');
-   }
+    catch{
+      setResultText('Error');
+    }
   };
   return (
     <form onSubmit={e => onSubmit(e)}>

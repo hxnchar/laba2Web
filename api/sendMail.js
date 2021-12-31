@@ -27,7 +27,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: `${MAIL_POST}`,
+    host: `${process.env.MAIL_POST}`,
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
@@ -87,19 +87,10 @@ module.exports = async (req, res) => {
         },
       });
     }
-    if (email === '') {
+    if (email === '' || password === '') {
       return res.status(403).json({
         error: true,
-        message: 'Email can`t be empty',
-        result: {
-          success: false,
-        },
-      });
-    }
-    if (password === '') {
-      return res.status(403).json({
-        error: true,
-        message: 'Password can`t be empty',
+        message: 'Email or password can`t be empty',
         result: {
           success: false,
         },
@@ -116,6 +107,7 @@ module.exports = async (req, res) => {
     }
     try{
       const result = await formSubmit(req.body);
+      return res.json({ result, error: false, message: '' });
     }
     catch{
       return res.status(501).json({
@@ -126,6 +118,5 @@ module.exports = async (req, res) => {
         },
       });
     }
-    return res.json({ result, error: false, message: '' });
   }
 };

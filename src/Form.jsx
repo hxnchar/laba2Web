@@ -22,6 +22,7 @@ export const Form = () => {
     setShowSpinner(true);
     setResultText('');
     setDisableButton(true);
+    let 
     try{
       const result = await fetch('/api/sendMail', {
         method: 'POST',
@@ -30,18 +31,18 @@ export const Form = () => {
           'Content-Type': 'application/json',
         },
       });
+      const responce = await result.json();
+      setShowSpinner(false);
+      setDisableButton(false);
+      if (!responce.result.success) {
+        setResultText(responce.message);
+      } else {
+        setResultText('Email is sent');
+      }
     }
-    catch{
-      setResultText('Error');
-    }
-    const responce = await result.json();
-    setShowSpinner(false);
-    setDisableButton(false);
-    if (!responce.result.success) {
-      setResultText(responce.message);
-    } else {
-      setResultText('Email is sent');
-    }
+   catch{
+    setResultText('Error');
+   }
   };
   return (
     <form onSubmit={e => onSubmit(e)}>

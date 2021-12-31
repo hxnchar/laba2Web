@@ -9,7 +9,7 @@ async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: process.env.EMAIL_ADRESS_TO,
+    to: 'alekseyhonchar@gmail.com',
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`

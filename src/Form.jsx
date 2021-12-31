@@ -19,17 +19,21 @@ export const Form = () => {
   };
   const onSubmit = async e => {
     e.preventDefault();
-    //https://2laba-dev-react.vercel.app/api/sendMail
     setShowSpinner(true);
     setResultText('');
     setDisableButton(true);
-    const result = await fetch('/api/sendMail', {
-      method: 'POST',
-      body: JSON.stringify(formData),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
+    try{
+      const result = await fetch('/api/sendMail', {
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+    catch{
+      setResultText('Error');
+    }
     const responce = await result.json();
     setShowSpinner(false);
     setDisableButton(false);

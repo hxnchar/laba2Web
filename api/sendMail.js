@@ -48,6 +48,18 @@ async function sendMail(options) {
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
+    try {
+      rateLimit(req.headers['x-real-ip'], 3);
+    } catch (e) {
+      return res.status(429).json({
+        status: 429,
+        message: 'too many req',
+        error: true,
+        result: {
+          success: false,
+        },
+      });
+    }
     return res.json({
       status: '200',
     });

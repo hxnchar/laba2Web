@@ -8,7 +8,7 @@ async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: process.env.EMAIL_ADRESS_TO,
+    to: 'alekseyhonchar@gmail.com',
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -18,13 +18,20 @@ async function formSubmit(formData) {
 
 const history = new Map();
 const rateLimit = (ip, limit = 3) => {
+  if (!history.has(ip)) {
+    history.set(ip, 0);
+  }
   if (history.get(ip) > limit) {
     throw new Error();
   }
+  console.log('Ip: ', ip, '; Number of req before: ', history.get(ip));
   history.set(ip, history.get(ip) + 1);
+  console.log('Ip: ', ip, '; Number of req after: ', history.get(ip));
 };
 
 function getTransporter() {
+  console.log(process.env.EMAIL_ADRESS);
+  console.log(process.env.EMAIL_PASSWORD);
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,

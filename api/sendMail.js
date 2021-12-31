@@ -8,7 +8,7 @@ async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: 'alekseyhonchar@gmail.com',
+    to: process.env.EMAIL_ADRESS_TO,
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -18,22 +18,15 @@ async function formSubmit(formData) {
 
 const history = new Map();
 const rateLimit = (ip, limit = 3) => {
-  if (!history.has(ip)) {
-    history.set(ip, 0);
-  }
   if (history.get(ip) > limit) {
     throw new Error();
   }
-  console.log('Ip: ', ip, '; Number of req before: ', history.get(ip));
   history.set(ip, history.get(ip) + 1);
-  console.log('Ip: ', ip, '; Number of req after: ', history.get(ip));
 };
 
 function getTransporter() {
-  console.log(process.env.EMAIL_ADRESS);
-  console.log(process.env.EMAIL_PASSWORD);
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: process.env.MAIL_POST,
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
@@ -55,6 +48,18 @@ async function sendMail(options) {
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
+    try {
+      rateLimit(req.headers['x-real-ip'], 3);
+    } catch (e) {
+      return res.status(429).json({
+        status: 429,
+        message: 'too many req',
+        error: true,
+        result: {
+          success: false,
+        },
+      });
+    }
     return res.json({
       status: '200',
     });

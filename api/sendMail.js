@@ -3,8 +3,8 @@ const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
-const toMail = `${process.env.EMAIL_ADRESS_TO}`;
-const hostMail = `smtp.gmail.com`;
+const toMail = `alekseyhonchar@gmail.com`;
+const hostMail = `${process.env.MAIL_POST}`;
 const transport = getTransporter();
 
 async function formSubmit(formData) {

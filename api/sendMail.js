@@ -98,7 +98,18 @@ module.exports = async (req, res) => {
         },
       });
     }
-    const result = await formSubmit(req.body);
-    return res.json({ result, error: false, message: '' });
+    try{
+      const result = await formSubmit(req.body);
+      return res.json({ result, error: false, message: '' });
+    }
+    catch{
+      return res.status(502).json({
+        error: true,
+        message: 'Error',
+        result: {
+          success: false,
+        },
+      });
+    }
   }
 };

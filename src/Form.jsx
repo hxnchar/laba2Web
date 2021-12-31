@@ -22,8 +22,9 @@ export const Form = () => {
     setShowSpinner(true);
     setResultText('');
     setDisableButton(true);
+    const result;
     try{
-      const result = await fetch('/api/sendMail', {
+      result = await fetch('/api/sendMail', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {

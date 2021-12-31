@@ -22,7 +22,7 @@ export const Form = () => {
     setShowSpinner(true);
     setResultText('');
     setDisableButton(true);
-    const result;
+    let result;
     try{
       result = await fetch('/api/sendMail', {
         method: 'POST',

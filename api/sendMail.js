@@ -9,6 +9,8 @@ const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
+  console.log(toMail);
+  console.log(hostMail);
   return sendMail({
     from,
     to: toMail,
@@ -31,7 +33,7 @@ function getTransporter() {
   return nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 587,
-    secure: false, // upgrade later with STARTTLS
+    secure: false,
     auth: {
       user: process.env.EMAIL_ADRESS,
       pass: process.env.EMAIL_PASSWORD,

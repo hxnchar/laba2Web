@@ -21,8 +21,8 @@ export const Form = () => {
     e.preventDefault();
     setShowSpinner(true);
     setResultText('');
-    setDisableButton(true); 
-    try{
+    setDisableButton(true);
+    try {
       const result = await fetch('/api/sendMail', {
         method: 'POST',
         body: JSON.stringify(formData),
@@ -38,8 +38,7 @@ export const Form = () => {
       } else {
         setResultText('Email is sent');
       }
-    }
-    catch{
+    } catch {
       setResultText('Error');
     }
   };

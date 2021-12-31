@@ -4,13 +4,11 @@ require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
 const toMail = `${process.env.EMAIL_ADRESS_TO}`;
-const hostMail = process.env.MAIL_POST;
+const hostMail = `${process.env.MAIL_POST}`;
 const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
-  console.log(toMail);
-  console.log(hostMail);
   return sendMail({
     from,
     to: toMail,
@@ -31,7 +29,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: hostMail,
     port: 587,
     secure: false,
     auth: {

@@ -106,18 +106,7 @@ module.exports = async (req, res) => {
       });
     }
     let result;
-    try{
-      result = await formSubmit(req.body);
-    }
-    catch{
-      return res.status(501).json({
-        error: true,
-        message: 'Error',
-        result: {
-          success: false,
-        },
-      });
-    }
+    result = await formSubmit(req.body);
     return res.json({ result, error: false, message: '' });
   }
 };

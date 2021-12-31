@@ -3,13 +3,15 @@ const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
+const toMail = 'alekseyhonchar@gmail.com';
+const hostMail = 'smtp.gmail.com';
 const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: 'alekseyhonchar@gmail.com',
+    toMail,
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -27,7 +29,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: process.env.MAIL_POST,
+    host: hostMail,
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {

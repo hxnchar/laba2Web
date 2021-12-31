@@ -3,12 +3,13 @@ const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
 const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
+const transport = getTransporter();
 
 async function formSubmit(formData) {
   const data = new Date();
   return sendMail({
     from,
-    to: `${process.env.EMAIL_ADRESS_TO}`,
+    to: 'alekseyhonchar@gmail.com',
     subject: 'New user',
     html: sanitizer(
       `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
@@ -26,7 +27,7 @@ const rateLimit = (ip, limit = 3) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: `${process.env.MAIL_POST}`,
+    host: 'smtp.gmail.com',
     port: 587,
     secure: false, // upgrade later with STARTTLS
     auth: {
@@ -38,7 +39,6 @@ function getTransporter() {
 
 async function sendMail(options) {
   try {
-    const transport = getTransporter();
     await transport.sendMail(options);
     return { success: true };
   } catch (error) {
@@ -66,28 +66,10 @@ module.exports = async (req, res) => {
       });
     }
     const { email, name, password, passwordConfirm } = req.body;
-    if (name === '') {
+    if (name === '' || email === '' || password === '') {
       return res.status(403).json({
         error: true,
-        message: 'Name can`t be empty',
-        result: {
-          success: false,
-        },
-      });
-    }
-    if (email === '') {
-      return res.status(403).json({
-        error: true,
-        message: 'Email can`t be empty',
-        result: {
-          success: false,
-        },
-      });
-    }
-    if (password === '') {
-      return res.status(403).json({
-        error: true,
-        message: 'Password can`t be empty',
+        message: 'Fields can`t be empty',
         result: {
           success: false,
         },
@@ -102,7 +84,18 @@ module.exports = async (req, res) => {
         },
       });
     }
-    const result = await formSubmit(req.body);
-    return res.json({ result, error: false, message: '' });
+    try{
+      const result = await formSubmit(req.body);
+      return res.json({ result, error: false, message: '' });
+    }
+    catch{
+      return res.status(502).json({
+        error: true,
+        message: 'Error',
+        result: {
+          success: false,
+        },
+      });
+    }
   }
 };

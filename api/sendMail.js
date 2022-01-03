@@ -24,11 +24,10 @@ const rateLimit = (ip, limit) => {
   if (!history.has(ip)) {
     history.set(ip, 0);
   }
+  history.set(ip, history.get(ip) + 1);
   if (history.get(ip) > limit) {
     throw new Error();
   }
-  history.set(ip, history.get(ip) + 1);
-  console.log('Ip: ', ip, '; Number of req before: ', history.get(ip));
 };
 
 function getTransporter() {
@@ -55,7 +54,7 @@ async function sendMail(options) {
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      rateLimit(req.headers['x-real-ip'], 3);
+      rateLimit(req.headers['x-real-ip'], 1);
     } catch (e) {
       return res.status(429).json({
         status: 429,
@@ -72,7 +71,7 @@ module.exports = async (req, res) => {
   }
   if (req.method === 'POST') {
     try {
-      rateLimit(req.headers['x-real-ip'], 3);
+      rateLimit(req.headers['x-real-ip'], 1);
     } catch (e) {
       return res.status(429).json({
         status: 429,

@@ -46,5 +46,6 @@
     "es2021": true,
     "node": true
   },
+  "plugins": ["sonarjs"],
   "ignorePatterns": ["/build/static/js/*.js", "/build/static/js/*.js.map"]
 }

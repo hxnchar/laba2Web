@@ -21,10 +21,14 @@ async function formSubmit(formData) {
 
 const history = new Map();
 const rateLimit = (ip, limit = 3) => {
+  if (!history.has(ip)) {
+    history.set(ip, 0);
+  }
   if (history.get(ip) > limit) {
     throw new Error();
   }
   history.set(ip, history.get(ip) + 1);
+  console.log('Ip: ', ip, '; Number of req before: ', history.get(ip));
 };
 
 function getTransporter() {

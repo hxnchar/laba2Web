@@ -40,10 +40,12 @@ export const Form = () => {
       }
     } catch {
       setResultText('Error');
+      setShowSpinner(false);
+      setDisableButton(false);
     }
   };
   return (
-    <form onSubmit={e => onSubmit(e)}>
+    <form onSubmit={onSubmit}>
       <Input
         placeholder="Enter email"
         type="email"

@@ -55,7 +55,7 @@ async function sendMail(options) {
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      rateLimit(req.headers['x-real-ip'], 1);
+      rateLimit(req.headers['x-real-ip'], 3);
     } catch (e) {
       return res.status(429).json({
         status: 429,
@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
   }
   if (req.method === 'POST') {
     try {
-      rateLimit(req.headers['x-real-ip'], 1);
+      rateLimit(req.headers['x-real-ip'], 3);
     } catch (e) {
       return res.status(429).json({
         status: 429,

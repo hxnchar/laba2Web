@@ -20,7 +20,7 @@ async function formSubmit(formData) {
 }
 
 const history = new Map();
-const rateLimit = (ip, limit = 1) => {
+const rateLimit = (ip, limit) => {
   if (!history.has(ip)) {
     history.set(ip, 0);
   }
@@ -55,7 +55,7 @@ async function sendMail(options) {
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
     try {
-      rateLimit(req.headers['x-real-ip'], 3);
+      rateLimit(req.headers['x-real-ip'], 1);
     } catch (e) {
       return res.status(429).json({
         status: 429,
@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
   }
   if (req.method === 'POST') {
     try {
-      rateLimit(req.headers['x-real-ip'], 3);
+      rateLimit(req.headers['x-real-ip'], 1);
     } catch (e) {
       return res.status(429).json({
         status: 429,

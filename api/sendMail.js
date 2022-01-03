@@ -26,14 +26,7 @@ const rateLimit = (ip, limit) => {
   }
   history.set(ip, history.get(ip) + 1);
   if (history.get(ip) > limit) {
-    return res.status(429).json({
-      status: 429,
-      message: 'too many req',
-      error: true,
-      result: {
-        success: false,
-      },
-    })
+    throw new Error();
   }
 };
 
@@ -60,13 +53,35 @@ async function sendMail(options) {
 
 module.exports = async (req, res) => {
   if (req.method === 'GET') {
-    rateLimit(req.headers['x-real-ip'], 1)
+    try {
+      rateLimit(req.headers['x-real-ip'], 1);
+    } catch (e) {
+      return res.status(429).json({
+        status: 429,
+        message: 'too many req',
+        error: true,
+        result: {
+          success: false,
+        },
+      });
+    }
     return res.json({
       status: '200',
     });
   }
   if (req.method === 'POST') {
-    rateLimit(req.headers['x-real-ip'], 1)
+    try {
+      rateLimit(req.headers['x-real-ip'], 1);
+    } catch (e) {
+      return res.status(429).json({
+        status: 429,
+        message: 'too many req',
+        error: true,
+        result: {
+          success: false,
+        },
+      });
+    }
     const { email, name, password, passwordConfirm } = req.body;
     if (name === '' || email === '' || password === '') {
       return res.status(403).json({

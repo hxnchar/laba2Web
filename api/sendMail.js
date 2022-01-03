@@ -21,9 +21,6 @@ async function formSubmit(formData) {
 
 const history = new Map();
 const rateLimit = (ip, limit) => {
-  if (!history.has(ip)) {
-    history.set(ip, 0);
-  }
   history.set(ip, history.get(ip) + 1);
   if (history.get(ip) > limit) {
     throw new Error();

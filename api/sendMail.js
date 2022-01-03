@@ -52,66 +52,55 @@ async function sendMail(options) {
 }
 
 module.exports = async (req, res) => {
-  if (req.method === 'GET') {
-    try {
-      rateLimit(req.headers['x-real-ip'], 1);
-    } catch (e) {
-      return res.status(429).json({
-        status: 429,
-        message: 'too many req',
-        error: true,
-        result: {
-          success: false,
-        },
+  try {
+    rateLimit(req.headers['x-real-ip'], 1);
+    if (req.method === 'GET') {
+      return res.json({
+        status: '200',
       });
     }
-    return res.json({
-      status: '200',
-    });
+    if (req.method === 'POST') {
+      const { email, name, password, passwordConfirm } = req.body;
+      if (name === '' || email === '' || password === '') {
+        return res.status(403).json({
+          error: true,
+          message: 'Fields can`t be empty',
+          result: {
+            success: false,
+          },
+        });
+      }
+      if (password !== passwordConfirm) {
+        return res.status(403).json({
+          error: true,
+          message: 'Passwords doesn`t match',
+          result: {
+            success: false,
+          },
+        });
+      }
+      try {
+        const result = await formSubmit(req.body);
+        return res.json({ result, error: false, message: '' });
+      } catch {
+        return res.status(502).json({
+          error: true,
+          message: 'Error',
+          result: {
+            success: false,
+          },
+        });
+      }
+    }
   }
-  if (req.method === 'POST') {
-    try {
-      rateLimit(req.headers['x-real-ip'], 1);
-    } catch (e) {
-      return res.status(429).json({
-        status: 429,
-        message: 'too many req',
-        error: true,
-        result: {
-          success: false,
-        },
-      });
-    }
-    const { email, name, password, passwordConfirm } = req.body;
-    if (name === '' || email === '' || password === '') {
-      return res.status(403).json({
-        error: true,
-        message: 'Fields can`t be empty',
-        result: {
-          success: false,
-        },
-      });
-    }
-    if (password !== passwordConfirm) {
-      return res.status(403).json({
-        error: true,
-        message: 'Passwords doesn`t match',
-        result: {
-          success: false,
-        },
-      });
-    }
-    try {
-      const result = await formSubmit(req.body);
-      return res.json({ result, error: false, message: '' });
-    } catch {
-      return res.status(502).json({
-        error: true,
-        message: 'Error',
-        result: {
-          success: false,
-        },
-      });
-    }
+  catch (e) {
+    return res.status(429).json({
+      status: 429,
+      message: 'too many req',
+      error: true,
+      result: {
+        success: false,
+      },
+    });
   }
 };

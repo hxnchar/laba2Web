@@ -39,7 +39,7 @@ export const Form = () => {
         setResultText('Email is sent');
       }
     } catch (e) {
-      setResultText(e.errors);
+      setResultText(e.message);
       setShowSpinner(false);
       setDisableButton(false);
     }

@@ -18,7 +18,7 @@ export const Form = () => {
   };
   const onSubmit = async e => {
     e.preventDefault();
-    setCountSpinners.update(n => n + 1);
+    setCountSpinners(n => n + 1);
     setResultText('');
     setDisableButton(true);
     try {
@@ -30,7 +30,7 @@ export const Form = () => {
         },
       });
       const responce = await res.json();
-      setCountSpinners.update(n => n - 1);
+      setCountSpinners(n => n - 1);
       setDisableButton(false);
       if (responce.errors) {
         throw new Error(responce.errors[0]);
@@ -39,7 +39,7 @@ export const Form = () => {
       }
     } catch (er) {
       setResultText(er.message);
-      setCountSpinners.update(n => n - 1);
+      setCountSpinners(n => n - 1);
       setDisableButton(false);
     }
   };

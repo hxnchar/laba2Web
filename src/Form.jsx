@@ -34,7 +34,7 @@ export const Form = () => {
       setShowSpinner(false);
       setDisableButton(false);
       if (!responce.result.success) {
-        setResultText(responce.message);
+        setResultText(e.errors[0]);
       } else {
         setResultText('Email is sent');
       }

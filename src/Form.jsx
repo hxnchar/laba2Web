@@ -30,7 +30,9 @@ export const Form = () => {
           'Content-Type': 'application/json',
         },
       });
-      console.log(result);
+      if (result.status != 200) {
+        throw new Error(result.error);
+      }
       const responce = await result.json();
       setShowSpinner(false);
       setDisableButton(false);

@@ -33,6 +33,7 @@ export const Form = () => {
       const responce = await res.json();
       setShowSpinner(false);
       setDisableButton(false);
+      console.log(responce);
       if (!responce.result.success) {
         throw new Error(res.result.errors[0]);
       } else {

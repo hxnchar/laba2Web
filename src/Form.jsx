@@ -38,8 +38,8 @@ export const Form = () => {
       } else {
         setResultText('Email is sent');
       }
-    } catch {
-      setResultText('Error');
+    } catch (e) {
+      setResultText(e.errors[0]);
       setShowSpinner(false);
       setDisableButton(false);
     }

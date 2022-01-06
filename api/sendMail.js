@@ -20,20 +20,25 @@ async function formSubmit(formData) {
 }
 
 const history = new Map();
+
 const rateLimit = (ip, limit) => {
-  if (!history.has(ip)) {
-    history.set(ip, 0);
-  }
-  history.set(ip, history.get(ip) + 1);
+  const count = history.get(ip) || 0;
   if (history.get(ip) > limit) {
-    throw new Error();
+    throw CustomError(429, 'too many req');
   }
+  history.set(ip, count + 1);
+};
+
+const CustomError = (errorStatus, errorMessage) => {
+  const err = new Error(errorMessage);
+  err.status = errorStatus;
+  return err;
 };
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: hostMail,
-    port: 587,
+    host: process.env.HOST,
+    port: process.env.PORT,
     secure: false,
     auth: {
       user: process.env.EMAIL_ADRESS,
@@ -51,52 +56,32 @@ async function sendMail(options) {
   }
 }
 
+const validate = body => {
+  const { email, name, password, passwordConfirm } = body;
+  if (!email) {
+    throw CustomError(400, 'email required');
+  }
+  if (!name) {
+    throw CustomError(400, 'name required');
+  }
+  if (!password) {
+    throw CustomError(400, 'password required');
+  }
+  if (password !== passwordConfirm) {
+    throw CustomError(400, 'password mismatch');
+  }
+};
+
 module.exports = async (req, res) => {
   try {
-    rateLimit(req.headers['x-real-ip'], 1);
-    if (req.method === 'GET') {
-      return res.json({
-        status: '200',
-      });
-    }
-    if (req.method === 'POST') {
-      const { email, name, password, passwordConfirm } = req.body;
-      if (name === '' || email === '' || password === '') {
-        return res.status(403).json({
-          error: true,
-          message: 'Fields can`t be empty',
-          result: {
-            success: false,
-          },
-        });
-      }
-      if (password !== passwordConfirm) {
-        return res.status(403).json({
-          error: true,
-          message: 'Passwords doesn`t match',
-          result: {
-            success: false,
-          },
-        });
-      }
-      try {
-        const result = await formSubmit(req.body);
-        return res.json({ result, error: false, message: '' });
-      } catch {
-        return res.status(502).json({
-          error: true,
-          message: 'Error',
-          result: {
-            success: false,
-          },
-        });
-      }
-    }
+    rateLimit(req.headers['x-real-ip'], 2);
+    validate(req.body);
+    const result = await formSubmit(req.body);
+    res.json({ result });
   } catch (e) {
-    return res.status(429).json({
-      status: 429,
-      message: 'too many req',
-      error: true,
+    return res.status(e.status).json({
+      status: e.status,
+      errors: [e.message],
       result: {
         success: false,
       },

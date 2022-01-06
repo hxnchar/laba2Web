@@ -20,7 +20,6 @@ async function formSubmit(formData) {
 }
 
 const history = new Map();
-
 const rateLimit = (ip, limit) => {
   const count = history.get(ip) || 0;
   if (history.get(ip) > limit) {
@@ -37,7 +36,7 @@ const CustomError = (errorStatus, errorMessage) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: process.env.HOST,
+    host: hostMail,
     port: process.env.PORT,
     secure: false,
     auth: {

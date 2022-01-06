@@ -79,9 +79,9 @@ module.exports = async (req, res) => {
     const result = await formSubmit(req.body);
     res.json({ result });
   } catch (e) {
-    return res.status(e.errorStatus).json({
-      status: e.errorStatus,
-      errors: [e.errorMessage],
+    return res.status(e.status).json({
+      status: e.status,
+      errors: [e.message],
       result: {
         success: false,
       },

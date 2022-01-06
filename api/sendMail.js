@@ -22,10 +22,10 @@ async function formSubmit(formData) {
 const history = new Map();
 const rateLimit = (ip, limit) => {
   const count = history.get(ip) || 0;
+  history.set(ip, count + 1);
   if (history.get(ip) > limit) {
     throw CustomError(429, 'too many req');
   }
-  history.set(ip, count + 1);
 };
 
 const CustomError = (errorStatus, errorMessage) => {
@@ -73,7 +73,7 @@ const validate = body => {
 
 module.exports = async (req, res) => {
   try {
-    rateLimit(req.headers['x-real-ip'], 2);
+    rateLimit(req.headers['x-real-ip'], 1);
     validate(req.body);
     const result = await formSubmit(req.body);
     res.json({ result });

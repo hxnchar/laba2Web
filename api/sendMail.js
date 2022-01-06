@@ -92,8 +92,7 @@ module.exports = async (req, res) => {
         });
       }
     }
-  }
-  catch (e) {
+  } catch (e) {
     return res.status(429).json({
       status: 429,
       message: 'too many req',

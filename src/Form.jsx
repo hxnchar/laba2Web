@@ -30,7 +30,9 @@ export const Form = () => {
           'Content-Type': 'application/json',
         },
       });
-      if (result.status != 200) {
+      if (result.error) {
+        console.log('why');
+        console.log(result.error);
         throw new Error(result.error);
       }
       const responce = await result.json();

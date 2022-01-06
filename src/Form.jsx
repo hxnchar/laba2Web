@@ -7,8 +7,7 @@ export const Form = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-
-  const [showSpinner, setShowSpinner] = useState(false);
+  const [countSpinners, setCountSpinners] = useState(0);
   const [disableButton, setDisableButton] = useState(false);
   const [resultText, setResultText] = useState('');
   const formData = {
@@ -19,7 +18,7 @@ export const Form = () => {
   };
   const onSubmit = async e => {
     e.preventDefault();
-    setShowSpinner(true);
+    setCountSpinners.update(n=>(n+1));
     setResultText('');
     setDisableButton(true);
     try {
@@ -31,7 +30,7 @@ export const Form = () => {
         },
       });
       const responce = await res.json();
-      setShowSpinner(false);
+      setCountSpinners.update(n=>(n-1));
       setDisableButton(false);
       if (responce.errors) {
         throw new Error(responce.errors[0]);
@@ -40,7 +39,7 @@ export const Form = () => {
       }
     } catch (er) {
       setResultText(er.message);
-      setShowSpinner(false);
+      setCountSpinners.update(n=>(n-1));
       setDisableButton(false);
     }
   };
@@ -75,7 +74,7 @@ export const Form = () => {
         setValue={setPasswordConfirm}
       />
       <Input type="submit" disabled={disableButton} />
-      {showSpinner ? <Loader /> : null}
+      {countSpinners > 0 ? <Loader /> : null}
       <br />
       {resultText}
     </form>

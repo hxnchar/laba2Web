@@ -33,9 +33,8 @@ export const Form = () => {
       const responce = await res.json();
       setShowSpinner(false);
       setDisableButton(false);
-      console.log(responce);
-      if (!responce.result.success) {
-        throw new Error(res.result.errors[0]);
+      if (responce.errors) {
+        throw new Error(responce.errors[0]);
       } else {
         setResultText('Email is sent');
       }

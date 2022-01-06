@@ -39,6 +39,8 @@ export const Form = () => {
         setResultText('Email is sent');
       }
     } catch (e) {
+      console.log(e);
+      console.log(e.message);
       setResultText(e.message);
       setShowSpinner(false);
       setDisableButton(false);

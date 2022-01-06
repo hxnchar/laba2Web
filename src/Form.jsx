@@ -38,10 +38,10 @@ export const Form = () => {
       } else {
         setResultText('Email is sent');
       }
-    } catch (e) {
-      console.log(e);
-      console.log(e.message);
-      setResultText(e.message);
+    } catch (er) {
+      console.log(er);
+      console.log(er.message);
+      setResultText(er.message);
       setShowSpinner(false);
       setDisableButton(false);
     }

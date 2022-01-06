@@ -31,7 +31,7 @@ export const Form = () => {
         },
       });
       if (result.error){
-        throw new Error(res.error);
+        throw new Error(result.error);
       }
       const responce = await result.json();
       setShowSpinner(false);

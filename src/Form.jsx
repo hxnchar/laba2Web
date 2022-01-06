@@ -23,17 +23,15 @@ export const Form = () => {
     setResultText('');
     setDisableButton(true);
     try {
-      const result = await fetch('/api/sendMail', {
+      const responce = await fetch('/api/sendMail', {
         method: 'POST',
         body: JSON.stringify(formData),
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      if (result.error) {
-        console.log('why');
-        console.log(result.error);
-        throw new Error(result.error);
+      if (!responce.result.success) {
+        throw new Error(responce.result.errors[0]);
       }
       const responce = await result.json();
       setShowSpinner(false);
@@ -44,8 +42,6 @@ export const Form = () => {
         setResultText('Email is sent');
       }
     } catch (er) {
-      console.log(er);
-      console.log(er.message);
       setResultText(er.message);
       setShowSpinner(false);
       setDisableButton(false);

@@ -22,10 +22,10 @@ async function formSubmit(formData) {
 const history = new Map();
 const rateLimit = (ip, limit) => {
   const count = history.get(ip) || 0;
-  history.set(ip, count + 1);
-  if (history.get(ip) > limit) {
+  if (count >= limit) {
     throw CustomError(429, 'too many req');
   }
+  history.set(ip, count + 1);
 };
 
 const CustomError = (errorStatus, errorMessage) => {

@@ -50,9 +50,15 @@
     "dotenv": "^10.0.0",
     "eslint-plugin-sonarjs": "^0.11.0",
     "husky": "^7.0.4",
+    "lint-staged": "^12.1.7",
     "prettier": "^2.5.1",
     "stylelint": "^13.13.1",
     "stylelint-config-standard": "^22.0.0",
     "stylelint-performance-animation": "^1.2.2"
+  },
+  "lint-staged": {
+    "*.*": "npm run format:fix",
+    "*.{js,jsx}": "npm run eslint:fix",
+    "*.{css,scss,sass}": "npm run stylelint:fix"
   }
 }

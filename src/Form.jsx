@@ -30,8 +30,6 @@ export const Form = () => {
         },
       });
       const responce = await res.json();
-      setCountSpinners(n => n - 1);
-      setDisableButton(false);
       if (responce.errors) {
         throw new Error(responce.errors[0]);
       } else {
@@ -39,6 +37,7 @@ export const Form = () => {
       }
     } catch (er) {
       setResultText(er.message);
+    } finally {
       setCountSpinners(n => n - 1);
       setDisableButton(false);
     }

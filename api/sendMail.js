@@ -2,19 +2,16 @@ const nodemailer = require('nodemailer');
 const sanitizer = require('sanitize-html');
 require('dotenv').config();
 
-const from = `aleksey - ${process.env.EMAIL_ADRESS}`;
-const toMail = `${process.env.EMAIL_ADRESS_TO}`;
-const hostMail = `${process.env.MAIL_POST}`;
 const transport = getTransporter();
 
 async function formSubmit(formData) {
-  const data = new Date();
+  const date = new Date();
   return sendMail({
-    from,
-    to: toMail,
+    from: `aleksey - ${process.env.EMAIL_ADRESS}`,
+    to: process.env.EMAIL_ADRESS_TO,
     subject: 'New user',
     html: sanitizer(
-      `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${data}`
+      `<ul><li>${formData.email}</li><li>${formData.name}</li></ul><br>${date}`
     ),
   });
 }
@@ -37,7 +34,7 @@ const CustomError = (errorStatus, errorMessage) => {
 
 function getTransporter() {
   return nodemailer.createTransport({
-    host: hostMail,
+    host: process.env.MAIL_POST,
     port: process.env.PORT,
     secure: false,
     auth: {

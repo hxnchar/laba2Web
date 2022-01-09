@@ -24,8 +24,8 @@
     "stylelint:fix": "stylelint \"**/*.css\" --fix  --ignore-path .gitignore",
     "eslint:fix": "eslint . --fix --ignore-path .gitignore",
     "eslint:check": "eslint . --ignore-path .gitignore",
-    "format:fix": "prettier --write . --ignore-path .gitignore",
-    "format:check": "prettier --check . --ignore-path .gitignore",
+    "format:fix": "prettier --write . --ignore-path .gitignore --ignore-path \"**/*.css\"",
+    "format:check": "prettier --check . --ignore-path .gitignore --ignore-path \"*.css\"",
     "prepare": "husky install"
   },
   "eslintConfig": {

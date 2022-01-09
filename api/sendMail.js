@@ -52,7 +52,7 @@ async function sendMail(options) {
     await transport.sendMail(options);
     return { success: true };
   } catch (error) {
-    throw new CustomError(500, error?.message ?? 'Send Error');;
+    throw new CustomError(500, error?.message ?? 'Send Error');
   }
 }
 

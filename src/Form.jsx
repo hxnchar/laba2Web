@@ -37,6 +37,9 @@ export const Form = () => {
       }
     } catch (er) {
       setResultText(er.message);
+    } finally {
+      setCountSpinners(n => n - 1);
+      setDisableButton(false);
     }
   };
   return (
